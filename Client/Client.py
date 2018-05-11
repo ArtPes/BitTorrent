@@ -701,12 +701,12 @@ class Client(object):
                             self.download_trigger.emit(str(n_part), str(download.getpeername()[0]), progress)
 
                         except IOError as e:
-                            # output(self.out_lck, 'IOError: ' + e.message)
-                            self.print_trigger.emit('IOError: ' + e.message, '01')
+                            # output(self.out_lck, 'IOError: ' + str(e))
+                            self.print_trigger.emit('IOError: ' + str(e), '01')
                             break
                         except Exception as e:
-                            # output(self.out_lck, 'Error: ' + e.message)
-                            self.print_trigger.emit('Error: ' + e.message, '01')
+                            # output(self.out_lck, 'Error: ' + str(e))
+                            self.print_trigger.emit('Error: ' + str(e), '01')
                             break
 
                     download.shutdown(1)

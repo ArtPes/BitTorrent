@@ -27,7 +27,7 @@ class MongoConnection():
             self.db.tracker.remove({})
             self.db.sessions.remove({})
         except Exception as e:
-            output(self.out_lck, "Could not connect to server: " + e.message)
+            output(self.out_lck, "Could not connect to server: " + str(e))
 
     def get_sessions(self):
         """
@@ -37,7 +37,7 @@ class MongoConnection():
         try:
             cursor = self.db.sessions.find()
         except Exception as e:
-            output(self.out_lck, "Database Error > get_sessions: " + e.message)
+            output(self.out_lck, "Database Error > get_sessions: " + str(e))
             self.db_lck.release()
         else:
             self.db_lck.release()
@@ -48,7 +48,7 @@ class MongoConnection():
         try:
             session = self.db.sessions.find_one({"session_id": session_id})
         except Exception as e:
-            output(self.out_lck, "Database Error > get_session: " + e.message)
+            output(self.out_lck, "Database Error > get_session: " + str(e))
             self.db_lck.release()
         else:
             self.db_lck.release()
@@ -65,7 +65,7 @@ class MongoConnection():
                                                 "port": port
                                                 })
         except Exception as e:
-            output(self.out_lck, "Database Error > insert_session: " + e.message)
+            output(self.out_lck, "Database Error > insert_session: " + str(e))
             self.db_lck.release()
         else:
             if cursor is not None:
@@ -84,7 +84,7 @@ class MongoConnection():
                     self.db_lck.release()
                     return session_id
                 except Exception as e:
-                    output(self.out_lck, "Database Error > insert_session: " + e.message)
+                    output(self.out_lck, "Database Error > insert_session: " + str(e))
                     self.db_lck.release()
                     return "0000000000000000"
 
