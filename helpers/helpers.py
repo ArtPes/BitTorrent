@@ -3,11 +3,85 @@ import os
 import hashlib
 import random
 import string
-import socket
-import connection
 import sys
 import time
-from ipaddr import *
+
+
+def loop_menu(lock, header, options):
+    action = None
+    while action is None:
+        output(lock, header)
+
+        for idx, o in enumerate(options, start=1):
+            output(lock, str(idx) + ": " + o + "")
+
+        try:
+            action = input()
+        except SyntaxError:
+            action = None
+
+        if not action:
+            output(lock, "Please select an option")
+            action = None
+        elif action == 'e':
+            return None
+        else:
+            try:
+                selected = int(action)
+            except ValueError:
+                output(lock, "A number is required")
+                continue
+            else:
+                if selected > len(options):
+                    output(lock, "Option " + str(selected) + " not available")
+                    action = None
+                    continue
+                else:
+                    return selected
+
+
+def loop_int_input(lock, header):
+    var = None
+    while var is None:
+        output(lock, header)
+
+        try:
+            var = input()
+        except ValueError:
+            var = None
+
+        if not var:
+            output(lock, "Type something!")
+            var = None
+        elif var == 'e':
+            return None
+        else:
+            try:
+                selected = int(var)
+            except ValueError:
+                output(lock, "A number is required")
+                continue
+            else:
+                return selected
+
+
+def loop_input(lock, header):
+    var = None
+    while var is None:
+        output(lock, header)
+
+        try:
+            var = input()
+        except ValueError:
+            var = None
+
+        if not var:
+            output(lock, "Type something!")
+            var = None
+        elif var == 'e':
+            return None
+        else:
+            return var
 
 
 def hashfile(file, hasher, blocksize=65536):
@@ -32,10 +106,8 @@ def hashfile_ip(file, hasher, bytes_ip):
 def get_shareable_files():
     files_list = []
 
-    # TODO: cambiare sul mac con ../fileCondivisi
     for root, dirs, files in os.walk("fileCondivisi"):
         for file in files:
-            # TODO: cambiare sul mac con ../fileCondivisi
             file_md5 = hashfile(open("fileCondivisi/" + file, 'rb'), hashlib.md5())
             files_list.append({
                 'name': file,
@@ -93,7 +165,7 @@ def filesize(self, n):
 
 def output(lock, message):
     lock.acquire()
-    print message
+    print(message)
     lock.release()
 
 

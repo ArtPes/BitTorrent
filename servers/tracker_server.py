@@ -8,7 +8,7 @@ from random import randint
 import threading
 from dbmodules.dbconnection import *
 from helpers import *
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Tracker_Server(threading.Thread):
@@ -18,7 +18,7 @@ class Tracker_Server(threading.Thread):
         Peer: non utilizzata
     """
 
-    def __init__(self, (client, address), dbConnect, output_lock, print_trigger, my_ipv4, my_ipv6, my_port):
+    def __init__(self, client, address, dbConnect, output_lock, print_trigger, my_ipv4, my_ipv6, my_port):
         # QtCore.QThread.__init__(self, parent=None)
         threading.Thread.__init__(self)
         self.client = client
@@ -60,10 +60,10 @@ class Tracker_Server(threading.Thread):
                     try:
                         conn.send(msg)
                         self.print_trigger.emit("=> " + str(self.address[0]) + "  " + msg[0:4] + '  ' + sessionId, "12")
-                    except socket.error, msg:
+                    except socket.error as msg:
                         self.print_trigger.emit("Connection Error: %s" % msg, "11")
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e.message, "11")
+                        self.print_trigger.emit('Error: ' + e, "11")
                     # Spazio
                     self.print_trigger.emit("", "10")
 
@@ -81,7 +81,7 @@ class Tracker_Server(threading.Thread):
 
                     delete = self.dbConnect.new_remove_session(session_Id)
                     if delete[0] is 'T':
-                        print "logout"
+                        print("logout")
                         # logout concesso
                         # TODO: finire
                         partown = delete[1:11]
@@ -90,24 +90,24 @@ class Tracker_Server(threading.Thread):
                             conn.send(msg)
                             # TODO: da finire la funzione che conta le parti
                             self.print_trigger.emit("=> " + "ALOG" + "  " + str(partown).zfill(8), "12")
-                        except socket.error, msg:
+                        except socket.error as msg:
                             self.print_trigger.emit("Connection Error: %s" % msg, "11")
                         except Exception as e:
-                            self.print_trigger.emit('Error: ' + e.message, "11")
+                            self.print_trigger.emit('Error: ' + e, "11")
                         # Spazio
                         self.print_trigger.emit("", "10")
                     else:
-                        print "not logout"
+                        print("not logout")
                         # logout non concesso
                         partdown = delete[1:11]
                         msg = "NLOG" + str(partdown).zfill(10)
                         try:
                             conn.send(msg)
                             self.print_trigger.emit("=> " + "NLOG" + " " + str(partdown).zfill(8), "12")
-                        except socket.error, msg:
+                        except socket.error as msg:
                             self.print_trigger.emit("Connection Error: %s" % msg, "11")
                         except Exception as e:
-                            self.print_trigger.emit('Error: ' + e.message, "11")
+                            self.print_trigger.emit('Error: ' + e, "11")
                         # Spazio
                         self.print_trigger.emit("", "10")
 
@@ -140,10 +140,10 @@ class Tracker_Server(threading.Thread):
                         conn.sendall(response)
                         self.print_trigger.emit("=> " + "AADR" + " " + str(num_part).zfill(8), "12")
 
-                    except socket.error, msg:
+                    except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(response), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e.message, '11')
+                        self.print_trigger.emit('Error: ' + e, '11')
 
                     self.print_trigger.emit("File succesfully shared by " + str(self.address[0]), "12")
                     # Spazio
@@ -177,10 +177,10 @@ class Tracker_Server(threading.Thread):
                         # Spazio
                         self.print_trigger.emit("", "10")
 
-                    except socket.error, msg:
+                    except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(msg), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e.message, '11')
+                        self.print_trigger.emit('Error: ' + e, '11')
 
                 elif cmd[:4] == 'FCHU':
                     # IPP2P:RND <> IPT:3000
@@ -244,10 +244,10 @@ class Tracker_Server(threading.Thread):
                         # Spazio
                         self.print_trigger.emit("", "10")
 
-                    except socket.error, msg:
+                    except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(msg), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e.message, '11')
+                        self.print_trigger.emit('Error: ' + e, '11')
 
                 elif cmd[:4] == 'RPAD':
                     # IPP2P:RND <> IPT:3000
@@ -270,10 +270,10 @@ class Tracker_Server(threading.Thread):
                     try:
                         conn.sendall(response)
 
-                    except socket.error, msg:
+                    except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(response), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e.message, '11')
+                        self.print_trigger.emit('Error: ' + e, '11')
 
                     self.print_trigger.emit("Part " + str(num_part) + " succesfully downloaded by " + str(self.address[0]), "12")
                     # Spazio

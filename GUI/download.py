@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'download.ui'
-#
-# Created by: PyQt4 UI code generator 4.11.4
-#
-# WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -22,7 +17,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_MainWindow(QtGui.QMainWindow):
+class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(Ui_MainWindow, self).__init__(parent)
         self.setObjectName(_fromUtf8("MainWindow"))
@@ -75,6 +70,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         part_doesnt_exists = True
 
         allRows = self.tableWidget.rowCount()
+        from ipaddr import xrange
         for row in xrange(0, allRows):
             part_number = self.tableWidget.item(row, 0).text()
 

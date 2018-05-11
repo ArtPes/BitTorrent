@@ -1,7 +1,6 @@
 # coding=utf-8
 import socket
 import random
-from helpers import output
 
 class Connection:
     """
@@ -38,8 +37,8 @@ class Connection:
             try:
                 self.socket.connect((self.ipv4, self.port))                                 # inizializzazione della connessione
                 # self.print_trigger.emit("Connected to: " + self.ipv4 + " " + str(self.port), self.print_mode + "2")
-            except socket.error, msg:
-                self.print_trigger.emit("Connection Error: %s" % msg, self.print_mode + "1")
+            except Exception as e:
+                self.print_trigger.emit("Connection Error: %s" % str(e), self.print_mode + "1")
 
         else:
             self.socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)                # creazione socket ipv6
@@ -47,7 +46,7 @@ class Connection:
             try:
                 self.socket.connect((self.ipv6, self.port))                                 # inizializzazione della connessione
                 # self.print_trigger.emit("Connected to: " + self.ipv6 + " " + str(self.port), self.print_mode + "2")
-            except socket.error, msg:
+            except Exception as msg:
                 self.print_trigger.emit("Connection Error: %s" % msg, self.print_mode + "1")
 
     '''

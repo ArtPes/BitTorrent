@@ -9,7 +9,7 @@
 import random
 import sys
 import time
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtWidgets
 
 from GUI import main_window as MainWindow
 
@@ -20,12 +20,13 @@ except AttributeError:
         return s
 
 try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
+    _encoding = QtWidgets.QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+        return QtWidgets.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+        return QtWidgets.QApplication.translate(context, text, disambig)
 
 
 class MyThread(QtCore.QThread):
@@ -38,8 +39,9 @@ class MyThread(QtCore.QThread):
         time.sleep(random.random()*5)  # random sleep to imitate working
         self.print_trigger.emit("prova", "mannaggia")
 
+
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     mainwindow = MainWindow.Ui_MainWindow()
     mainwindow.show()

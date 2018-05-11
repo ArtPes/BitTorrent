@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 #from PyQt4.QtGui import QApplication
 
 try:
@@ -16,22 +16,22 @@ except AttributeError:
         return s
 
 try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
+    _encoding = QtWidgets.QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+        return QtWidgets.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+        return QtWidgets.QApplication.translate(context, text, disambig)
 
-class Ui_MainWindow(QtGui.QMainWindow):
+class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(Ui_MainWindow, self).__init__(parent)
         self.setObjectName(_fromUtf8("MainWindow"))
         self.resize(800, 600)
         self.setMinimumSize(QtCore.QSize(600, 350))
         self.setMaximumSize(QtCore.QSize(1200, 650))
-        self.centralwidget = QtGui.QWidget(self)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+        self.centralwidget = QtWidgets.QWidget(self)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
@@ -39,61 +39,61 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.centralwidget.setMinimumSize(QtCore.QSize(600, 300))
         self.centralwidget.setMaximumSize(QtCore.QSize(1200, 600))
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.widget = QtGui.QWidget(self.centralwidget)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(9, 9, 781, 581))
         self.widget.setObjectName(_fromUtf8("widget"))
-        self.verticalLayout_3 = QtGui.QVBoxLayout(self.widget)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
-        self.gridLayout_3 = QtGui.QGridLayout()
+        self.gridLayout_3 = QtWidgets.QGridLayout()
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
-        self.gridLayout = QtGui.QGridLayout()
-        self.gridLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.label = QtGui.QLabel(self.widget)
+        self.label = QtWidgets.QLabel(self.widget)
         self.label.setMaximumSize(QtCore.QSize(40, 20))
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        self.label_1 = QtGui.QLabel(self.widget)
+        self.label_1 = QtWidgets.QLabel(self.widget)
         self.label_1.setMinimumSize(QtCore.QSize(0, 0))
         self.label_1.setMaximumSize(QtCore.QSize(45, 20))
         self.label_1.setObjectName(_fromUtf8("label_1"))
         self.gridLayout.addWidget(self.label_1, 0, 1, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout, 0, 0, 1, 1)
-        self.gridLayout_2 = QtGui.QGridLayout()
+        self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.client = QtGui.QTextBrowser(self.widget)
+        self.client = QtWidgets.QTextBrowser(self.widget)
         self.client.setMinimumSize(QtCore.QSize(300, 200))
         self.client.setMaximumSize(QtCore.QSize(600, 600))
         self.client.setObjectName(_fromUtf8("client"))
         self.gridLayout_2.addWidget(self.client, 0, 0, 1, 1)
-        self.server = QtGui.QTextBrowser(self.widget)
+        self.server = QtWidgets.QTextBrowser(self.widget)
         self.server.setMinimumSize(QtCore.QSize(300, 200))
         self.server.setMaximumSize(QtCore.QSize(600, 600))
         self.server.setObjectName(_fromUtf8("server"))
         self.gridLayout_2.addWidget(self.server, 0, 1, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout_2, 1, 0, 1, 1)
         self.verticalLayout_3.addLayout(self.gridLayout_3)
-        self.verticalLayout = QtGui.QVBoxLayout()
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.verticalLayout_2 = QtGui.QVBoxLayout()
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
-        self.download_label = QtGui.QLabel(self.widget)
+        self.download_label = QtWidgets.QLabel(self.widget)
         self.download_label.setObjectName(_fromUtf8("download_label"))
         self.verticalLayout_2.addWidget(self.download_label)
-        self.progressBar = QtGui.QProgressBar(self.widget)
+        self.progressBar = QtWidgets.QProgressBar(self.widget)
         self.progressBar.setRange(0, 100)
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName(_fromUtf8("progressBar"))
         self.verticalLayout_2.addWidget(self.progressBar)
-        self.tableWidget = QtGui.QTableWidget(self.widget)
+        self.tableWidget = QtWidgets.QTableWidget(self.widget)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
         self.tableWidget.setRowCount(0)
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(2, item)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout_2.addWidget(self.tableWidget)
@@ -156,7 +156,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
                 part_doesnt_exists = False
 
                 self.tableWidget.removeCellWidget(row, 2)
-                progressbar = QtGui.QProgressBar()
+                progressbar = QtWidgets.QProgressBar()
                 progressbar.setRange(0, 100)
                 progressbar.setValue(progress)
                 self.tableWidget.setCellWidget(row, 2, progressbar)
@@ -165,15 +165,15 @@ class Ui_MainWindow(QtGui.QMainWindow):
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             row = self.tableWidget.rowCount() - 1
 
-            item = QtGui.QTableWidgetItem(QtCore.QString(part_n))
+            item = QtWidgets.QTableWidgetItem(QtCore.QString(part_n))
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.tableWidget.setItem(row, 0, item)
 
-            item = QtGui.QTableWidgetItem(QtCore.QString(source))
+            item = QtWidgets.QTableWidgetItem(QtCore.QString(source))
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.tableWidget.setItem(row, 1, item)
 
-            progressbar = QtGui.QProgressBar()
+            progressbar = QtWidgets.QProgressBar()
             progressbar.setRange(0, 100)
             progressbar.setValue(progress)
             self.tableWidget.setCellWidget(row, 2, progressbar)

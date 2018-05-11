@@ -1,19 +1,19 @@
 # coding=utf-8
 import time
 import math, time
-from SharedFile import SharedFile
+from . import SharedFile
 from helpers import connection
 from helpers.scheduler import Scheduler
 from helpers.helpers import *
 import threading, json, collections
 from multiprocessing import Pool
-from DownloadingThreadPool import ThreadPool
+from .DownloadingThreadPool import ThreadPool
+
 
 class Client(object):
 
     session_id = None
     files_list = []
-    #TODO cambiare sul mac con ./fileCondivisi
     path = "./fileCondivisi"
     tracker = None
     parallel_downloads = 5
@@ -62,29 +62,27 @@ class Client(object):
         response_message = None
         try:
             self.tracker = None
-            c = connection.Connection(self.track_ipv4, self.track_ipv6, self.track_port, self.print_trigger,
-                                      "0")  # Creazione connessione con la directory
+            c = connection.Connection(self.track_ipv4, self.track_ipv6, self.track_port, self.print_trigger, "0")  # Creazione connessione con la directory
             c.connect()
             self.tracker = c.socket
 
-            self.tracker.send(msg)  # Richiesta di login
+            self.tracker.send(msg)  # mando il messaggio di richiesta di login
 
+            # stampo nella grafica
             self.print_trigger.emit(
                 '=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.my_ipv4 + '  ' +
                 self.my_ipv6 + '  ' + str(self.my_port).zfill(5), "00")
             self.print_trigger.emit("", "00")  # Space
 
             response_message = recvall(self.tracker, 20)  # Risposta della directory, deve contenere ALGI e il session id
+            # stampo nella grafica la risposta
             self.print_trigger.emit(
                 '<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] + '  ' + response_message[4:20],
                 '02')
             self.print_trigger.emit("", "00")  # Space
 
-        except socket.error, msg:
-            self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-            self.print_trigger.emit("", "00")
         except Exception as e:
-            self.print_trigger.emit('Error: ' + e.message, '01')
+            self.print_trigger.emit('Error: ' + str(e), '01')
             self.print_trigger.emit("", "00")  # Space
 
         if response_message is None:
@@ -115,7 +113,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.send(msg)  # Richeista di logout
+            self.tracker.send(msg)  # richiesta di logout
 
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id,
                                     "00")
@@ -130,11 +128,8 @@ class Client(object):
                 '02')
             self.print_trigger.emit("", "00")  # Space
 
-        except socket.error, msg:
-            self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-            self.print_trigger.emit("", "00")  # Space
         except Exception as e:
-            self.print_trigger.emit('Error: ' + e.message, '01')
+            self.print_trigger.emit('Error: ' + str(e), '01')
             self.print_trigger.emit("", "00")  # Space
 
         if response_message is None:
@@ -219,11 +214,9 @@ class Client(object):
                                 self.print_trigger.emit("", "00")  # Space
 
                                 response_message = recvall(self.tracker, 4)
-                            except socket.error, msg:
-                                self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-                                self.print_trigger.emit("", "00")  # Space
+
                             except Exception as e:
-                                self.print_trigger.emit('Error: ' + e.message, '01')
+                                self.print_trigger.emit('Error: ' + str(e), '01')
                                 self.print_trigger.emit("", "00")  # Space
 
                             if response_message[:4] == 'AADR':
@@ -282,11 +275,9 @@ class Client(object):
 
             response_message = recvall(self.tracker, 4)
             printable_response = response_message + '  '
-        except socket.error, msg:
-            self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-            self.print_trigger.emit("", "00")  # Space
+
         except Exception as e:
-            self.print_trigger.emit('Error: ' + e.message, '01')
+            self.print_trigger.emit('Error: ' + str(e), '01')
             self.print_trigger.emit("", "00")  # Space
 
         if response_message is None:
@@ -298,11 +289,8 @@ class Client(object):
             try:
                 idmd5 = recvall(self.tracker, 3)  # Numero di identificativi md5
 
-            except socket.error as e:
-                self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-                self.print_trigger.emit("", "00")  # Space
             except Exception as e:
-                self.print_trigger.emit('Error: ' + str(msg), '01')
+                self.print_trigger.emit('Error: ' + str(e), '01')
                 self.print_trigger.emit("", "00")  # Space
 
             if idmd5 is None:
@@ -340,10 +328,8 @@ class Client(object):
                                                         "len_part": len_part_i
                                                         })
 
-                        except socket.error, msg:
-                            output(self.out_lck, 'Socket Error: ' + str(msg))
                         except Exception as e:
-                            output(self.out_lck, 'Error: ' + e.message)
+                            output(self.out_lck, 'Error: ' + str(e))
 
                         self.print_trigger.emit(
                             '<= ' + str(self.tracker.getpeername()[0]) + '  ' + printable_response, '02')
@@ -461,11 +447,8 @@ class Client(object):
             response_message = recvall(self.tracker, 4)
             printable_response = response_message + '  '
 
-        except socket.error, msg:
-            self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-            self.print_trigger.emit("", "00")  # Space
         except Exception as e:
-            self.print_trigger.emit('Error: ' + e.message, '01')
+            self.print_trigger.emit('Error: ' + str(e), '01')
             self.print_trigger.emit("", "00")  # Space
 
         if response_message is None:
@@ -670,7 +653,7 @@ class Client(object):
                     c.connect()
                     download = c.socket
 
-                except socket.error, msg:
+                except Exception as msg:
                     download = None
             else:
                 download = None
@@ -692,11 +675,9 @@ class Client(object):
 
                 response_message = recvall(download, 4)
 
-            except socket.error, msg:
-                self.print_trigger.emit('Socket Error: ' + str(msg), '01')
 
             except Exception as e:
-                self.print_trigger.emit('Error: ' + e.message, '01')
+                self.print_trigger.emit('Error: ' + str(e), '01')
 
             else:
                 if response_message[:4] == 'AREP':
@@ -719,10 +700,6 @@ class Client(object):
                             progress = round(float(i) * 100 / float(n_chunks), 0)
                             self.download_trigger.emit(str(n_part), str(download.getpeername()[0]), progress)
 
-                        except socket.error as e:
-                            # output(self.out_lck, 'Socket Error: ' + e.message)
-                            self.print_trigger.emit('Socket Error: ' + e.message, '01')
-                            break
                         except IOError as e:
                             # output(self.out_lck, 'IOError: ' + e.message)
                             self.print_trigger.emit('IOError: ' + e.message, '01')
@@ -774,11 +751,8 @@ class Client(object):
             # output(self.out_lck, msg)
             response_message = recvall(self.tracker, 4)
 
-        except socket.error, msg:
-            self.print_trigger.emit('Socket Error: ' + str(msg), '01')
-
         except Exception as e:
-            self.print_trigger.emit('Error: ' + e.message, '01')
+            self.print_trigger.emit('Error: ' + str(e), '01')
 
         if response_message is None:
             output(self.out_lck, 'No response from tracker. Download failed')

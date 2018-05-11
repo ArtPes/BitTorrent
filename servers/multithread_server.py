@@ -1,11 +1,14 @@
 # coding=utf-8
 import socket, os, hashlib, select, sys, time
+import threading
+
+from dbmodules.dbconnection import MongoConnection
 
 sys.path.insert(1, '/home/massa/Documenti/PycharmProjects/P2PKazaa')
-from peer_server import *
-from tracker_server import *
+from .peer_server import *
+from .tracker_server import *
 import config
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore
 
 class Server(threading.Thread, QtCore.QThread):
     print_trigger = QtCore.pyqtSignal(str, str)
@@ -36,11 +39,11 @@ class Server(threading.Thread, QtCore.QThread):
                 self.sock_lst[-1].bind((self.host, item))
                 self.sock_lst[-1].listen(self.backlog)
                 #self.print_trigger.emit("Listening on " + str(item), "10")
-        except socket.error, (value, message):
+        except socket.error as value:
             if self.sock_lst[-1]:
                 self.sock_lst[-1].close()
                 self.sock_lst = self.sock_lst[:-1]
-                self.print_trigger.emit("Could not open socket: " + message, "11")
+                self.print_trigger.emit("Could not open socket: " + str(value), "11")
             sys.exit(1)
 
         self.running = 1

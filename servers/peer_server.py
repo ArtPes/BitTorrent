@@ -5,7 +5,7 @@ import socket, os, hashlib, select, sys, time
 from random import randint
 import threading
 from dbmodules.dbconnection import *
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtWidgets
 from helpers import *
 
 
@@ -19,7 +19,7 @@ class Peer_Server(threading.Thread):
     path = "./fileCondivisi"
 
 
-    def __init__(self, (client, address), dbConnect, output_lock, print_trigger, my_ipv4, my_ipv6, my_port):
+    def __init__(self, client, address, dbConnect, output_lock, print_trigger, my_ipv4, my_ipv6, my_port):
         #QtCore.QThread.__init__(self, parent=None)
         threading.Thread.__init__(self)
         self.client = client
@@ -133,27 +133,27 @@ class Peer_Server(threading.Thread):
 
                                     offset += chunk_size
                                     buff = requested_part[offset: offset + chunk_size]  # Lettura chunk successivo
-                                except socket.error, msg:
+                                except socket.error as msg:
                                     self.print_trigger.emit("Connection Error: %s" % msg, '11')
                                 except Exception as e:
-                                    self.print_trigger.emit('Error: ' + e.message, '11')
+                                    self.print_trigger.emit('Error: ' + e, '11')
 
                             if len(buff) != 0:  # Invio dell'eventuale resto, se più piccolo di chunk_size
                                 try:
                                     msg = str(len(buff)).zfill(5) + buff
                                     conn.sendall(msg)
 
-                                except socket.error, msg:
+                                except socket.error as msg:
                                     self.print_trigger.emit("Connection Error: %s" % msg, '11')
                                 except Exception as e:
-                                    self.print_trigger.emit('Error: ' + e.message, '11')
+                                    self.print_trigger.emit('Error: ' + e, '11')
 
                             #output(self.output_lock, "\r\nUpload Completed")
 
-                        except socket.error, msg:
+                        except socket.error as msg:
                             self.print_trigger.emit("Connection Error: %s" % msg, '11')
                         except Exception as e:
-                            self.print_trigger.emit('Error: ' + e.message, '11')
+                            self.print_trigger.emit('Error: ' + e, '11')
                         except EOFError:
                             self.print_trigger.emit("Error: You have read a EOF char", '11')
 
