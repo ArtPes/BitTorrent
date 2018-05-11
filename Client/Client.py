@@ -66,7 +66,7 @@ class Client(object):
             c.connect()
             self.tracker = c.socket
 
-            self.tracker.send(msg)  # mando il messaggio di richiesta di login
+            self.tracker.send(msg).encode("utf-8")  # mando il messaggio di richiesta di login
 
             # stampo nella grafica
             self.print_trigger.emit(
@@ -113,7 +113,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.send(msg)  # richiesta di logout
+            self.tracker.send(msg).encode("utf-8")  # richiesta di logout
 
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id,
                                     "00")
@@ -206,7 +206,7 @@ class Client(object):
                             try:
                                 self.check_connection()
 
-                                self.tracker.send(msg)
+                                self.tracker.send(msg).encode("utf-8")
                                 self.print_trigger.emit(
                                     '=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id +
                                     '  ' + str(LenFile).strip("") + '  ' + str(LenPart).strip("") + '  ' + str(FileName).strip("") +
@@ -267,7 +267,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.send(msg)
+            self.tracker.send(msg).encode("utf-8")
             self.print_trigger.emit(
                 '=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id +
                 '  ' + ricerca.ljust(20), "00")
@@ -439,7 +439,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.sendall(msg)
+            self.tracker.sendall(msg).encode("utf-8")
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' +
                                     self.session_id + '  ' + file['md5'], "00")
             self.print_trigger.emit("", "00")  # Space
@@ -668,7 +668,7 @@ class Client(object):
             response_message = None
             try:
 
-                download.send(msg)
+                download.send(msg).encode("utf-8")
                 self.print_trigger.emit('=> ' + str(download.getpeername()[0]) + '  ' + msg[0:4] + '  ' +
                                         md5 + '  ' + msg[36:], "00")
                 self.print_trigger.emit("", "00")  # Space
@@ -744,7 +744,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.sendall(msg)
+            self.tracker.sendall(msg).encode("utf-8")
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' +
                                     self.session_id + '  ' + md5 + '  ' + str(n_part), "00")
             self.print_trigger.emit("", "00")  # Space

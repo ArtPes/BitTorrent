@@ -35,7 +35,7 @@ class Tracker_Server(threading.Thread):
         conn = self.client
         #cmd = recvall(conn, self.size)
         try:
-            cmd = conn.recv(self.size)
+            cmd = conn.recv(self.size).decode("ascii")
         except socket.error:
             pass
         else:
@@ -58,7 +58,7 @@ class Tracker_Server(threading.Thread):
                     sessionId = self.dbConnect.insert_session(ipv4, ipv6, port)
                     msg = 'ALGI' + sessionId
                     try:
-                        conn.send(msg)
+                        conn.send(msg).encode("utf-8")
                         self.print_trigger.emit("=> " + str(self.address[0]) + "  " + msg[0:4] + '  ' + sessionId, "12")
                     except socket.error as msg:
                         self.print_trigger.emit("Connection Error: %s" % msg, "11")
@@ -87,7 +87,7 @@ class Tracker_Server(threading.Thread):
                         partown = delete[1:11]
                         msg = "ALOG" + str(partown).zfill(10)
                         try:
-                            conn.send(msg)
+                            conn.send(msg).encode("utf-8")
                             # TODO: da finire la funzione che conta le parti
                             self.print_trigger.emit("=> " + "ALOG" + "  " + str(partown).zfill(8), "12")
                         except socket.error as msg:
@@ -102,7 +102,7 @@ class Tracker_Server(threading.Thread):
                         partdown = delete[1:11]
                         msg = "NLOG" + str(partdown).zfill(10)
                         try:
-                            conn.send(msg)
+                            conn.send(msg).encode("utf-8")
                             self.print_trigger.emit("=> " + "NLOG" + " " + str(partdown).zfill(8), "12")
                         except socket.error as msg:
                             self.print_trigger.emit("Connection Error: %s" % msg, "11")
@@ -137,7 +137,7 @@ class Tracker_Server(threading.Thread):
                     response = "AADR" + str(num_part).zfill(8)
 
                     try:
-                        conn.sendall(response)
+                        conn.sendall(response).encode("utf-8")
                         self.print_trigger.emit("=> " + "AADR" + " " + str(num_part).zfill(8), "12")
 
                     except socket.error as msg:
@@ -170,7 +170,7 @@ class Tracker_Server(threading.Thread):
                         print_msg += "  " + str(file['md5']).ljust(32) + "  " + str(file['name']).ljust(100) + "  " + str(file['len_file']).zfill(10) + "  " + str(file['len_part']).zfill(6)
 
                     try:
-                        conn.sendall(msg)
+                        conn.sendall(msg).encode("utf-8")
 
                         self.print_trigger.emit(
                             "=> " + str(conn.getpeername()[0]) + "  " + print_msg, "12")
@@ -237,7 +237,7 @@ class Tracker_Server(threading.Thread):
                                      "  " + str(ascii_part_list)
 
                     try:
-                        conn.sendall(msg)
+                        conn.sendall(msg).encode("utf-8")
 
                         self.print_trigger.emit(
                             "=> " + str(conn.getpeername()[0]) + "  " + print_msg, "12")
@@ -268,7 +268,7 @@ class Tracker_Server(threading.Thread):
                     response = "APAD" + num_part
 
                     try:
-                        conn.sendall(response)
+                        conn.sendall(response).encode("utf-8")
 
                     except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(response), '11')
@@ -283,6 +283,6 @@ class Tracker_Server(threading.Thread):
                     self.print_trigger.emit("\nError: Command" + cmd + " not recognized", '11')
 
                 try:
-                    cmd = conn.recv(self.size)
+                    cmd = conn.recv(self.size).decode("ascii")
                 except socket.error:
                     pass
