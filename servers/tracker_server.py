@@ -3,7 +3,7 @@
 import socket, os, hashlib, select, sys, time
 import math
 
-sys.path.insert(1, '/home/massa/Documenti/PycharmProjects/P2PKazaa')
+sys.path.insert(1, 'insert_path_of_directory')
 from random import randint
 import threading
 from dbmodules.dbconnection import *

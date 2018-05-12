@@ -32,6 +32,7 @@ class Connection:
         """
 
         if random.choice((True, False)):
+            self.ipv4 = remove_zero(self.ipv4)
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                 # creazione socket ipv4
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
@@ -80,3 +81,23 @@ class Connection:
         except socket.error, msg:
             output(self.out_lck, "Connection error ipv6!\nTerminated.\nSocket.error : %s" % str(msg))
     '''
+def add_zero(ip):                                  # aggiunge 0 davanti
+    li = ip.split(".")
+    a = li[0].zfill(3)
+    b = li[1].zfill(3)
+    c = li[2].zfill(3)
+    d = li[3].zfill(3)
+
+    new_ip = a + "." + b + "." + c + "." + d
+    return new_ip
+
+
+def remove_zero(ip):                               # rimuove 0 davanti
+    li = ip.split(".")
+    a = int(li[0])
+    b = int(li[1])
+    c = int(li[2])
+    d = int(li[3])
+
+    new_ip = str(a) + "." + str(b) + "." + str(c) + "." + str(d)
+    return new_ip

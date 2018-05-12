@@ -4,7 +4,7 @@ import threading
 
 from dbmodules.dbconnection import MongoConnection
 
-sys.path.insert(1, '/home/massa/Documenti/PycharmProjects/P2PKazaa')
+sys.path.insert(1, 'insert_path_of_directory')
 from .peer_server import *
 from .tracker_server import *
 import config
