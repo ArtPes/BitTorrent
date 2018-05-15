@@ -68,6 +68,7 @@ class Main(QtCore.QThread):
                         else:
                             output(out_lck, "Option " + str(int_option) + " not available")
 
+
                 elif int_option == 2:
                     client.parallel_downloads = loop_int_input(out_lck, "Insert the number of parallel downloads: ")
 
