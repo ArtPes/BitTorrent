@@ -138,13 +138,13 @@ class Tracker_Server(threading.Thread):
                     response = "AADR" + str(num_part).zfill(8)
 
                     try:
-                        conn.sendall(response).encode("utf-8")
+                        conn.sendall(response.encode("utf-8"))
                         self.print_trigger.emit("=> " + "AADR" + " " + str(num_part).zfill(8), "12")
 
                     except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(response), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e, '11')
+                        self.print_trigger.emit('Error: ' + str(e), '11')
 
                     self.print_trigger.emit("File succesfully shared by " + str(self.address[0]), "12")
                     # Spazio
@@ -269,7 +269,7 @@ class Tracker_Server(threading.Thread):
                     response = "APAD" + num_part
 
                     try:
-                        conn.sendall(response).encode("utf-8")
+                        conn.sendall(response.encode("utf-8"))
 
                     except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(response), '11')
