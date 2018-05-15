@@ -428,7 +428,7 @@ class Client(object):
 
         n_parts = int(math.ceil(float(file['len_file']) / float(file['len_part'])))  # 1024
 
-        n_parts8 = int(math.ceil(float(float(n_parts)/8)))  # 128
+        n_parts8 = int(math.ceil(float(float(n_parts))))  # 128
 
         output(self.out_lck, "\nFetching parts informations about file " + file['name'])
         msg = "FCHU" + self.session_id + file['md5']
