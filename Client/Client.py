@@ -8,7 +8,7 @@ from helpers.helpers import *
 import threading, json, collections
 from multiprocessing import Pool
 from .DownloadingThreadPool import ThreadPool
-
+from bitstring import BitArray
 
 class Client(object):
 
@@ -471,18 +471,18 @@ class Client(object):
                     for i in range(0, n_hitpeers):
                         hitpeer_ipv4 = recvall(self.tracker, 16).decode('ascii').replace("|", "")
                         printable_response += hitpeer_ipv4 + '  '
-                        hitpeer_ipv6 = recvall(self.tracker, 39).decode('ascii')
-                        printable_response += hitpeer_ipv6 + '  '
-                        hitpeer_port = recvall(self.tracker, 5).decode('ascii')
-                        printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, n_parts8)
-                        printable_response += hitpeer_partlist.decode('ascii') + '  '
+                        hitpeer_ipv6 = recvall(self.tracker, 39)
+                        printable_response += hitpeer_ipv6.decode('ascii') + '  '
+                        hitpeer_port = recvall(self.tracker, 5)
+                        printable_response += hitpeer_port.decode('ascii') + '  '
+                        hitpeer_partlist = BitArray(recvall(self.tracker, n_parts8))
+                        printable_response += hitpeer_partlist.bin + '  '
 
                         hitpeers.append({
                             "ipv4": hitpeer_ipv4,
                             "ipv6": hitpeer_ipv6,
                             "port": hitpeer_port,
-                            "part_list": hitpeer_partlist
+                            "part_list": hitpeer_partlist.bin
                         })
 
                     self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + printable_response, '02')

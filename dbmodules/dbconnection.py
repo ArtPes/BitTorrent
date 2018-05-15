@@ -681,3 +681,9 @@ class MongoConnection():
             else:
                 self.db_lck.release()
                 return "F" + str(tot_part_down).zfill(10)
+
+    def refresh(self):
+        self.db.download.drop()
+        self.db.files.drop()
+        self.db.session.drop()
+        self.db.tracker.drop()

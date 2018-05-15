@@ -6,11 +6,9 @@ from servers import multithread_server
 from dbmodules.dbconnection import *
 from helpers.helpers import *
 import config
-from PyQt5 import QtCore, QtWidgets
 from GUI.ui import *
 from GUI import main_window
 from GUI import download
-
 
 class Main(QtCore.QThread):
     download_trigger = QtCore.pyqtSignal(str, str, int)  # n parte, sorgente, progresso
@@ -26,6 +24,7 @@ class Main(QtCore.QThread):
         out_lck = threading.Lock()
         # connessione al database
         db = MongoConnection(out_lck)
+        db.refresh()
 
         int_choice = loop_menu(out_lck, "Are you a tracker?", ["Yes", "No"])
 
@@ -78,6 +77,7 @@ class Main(QtCore.QThread):
 
 
 if __name__ == "__main__":
+
     app = QtWidgets.QApplication(sys.argv)
 
     mainwindow = main_window.Ui_MainWindow()
