@@ -66,7 +66,7 @@ class Client(object):
             c.connect()
             self.tracker = c.socket
 
-            self.tracker.send(msg).encode("utf-8")  # mando il messaggio di richiesta di login
+            self.tracker.send(msg.encode('utf-8'))  # mando il messaggio di richiesta di login
 
             # stampo nella grafica
             self.print_trigger.emit(
@@ -113,7 +113,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.send(msg).encode("utf-8")  # richiesta di logout
+            self.tracker.send(msg.encode('utf-8'))  # richiesta di logout
 
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id,
                                     "00")
@@ -206,14 +206,14 @@ class Client(object):
                             try:
                                 self.check_connection()
 
-                                self.tracker.send(msg).encode("utf-8")
+                                self.tracker.send(msg.encode('utf-8'))
                                 self.print_trigger.emit(
                                     '=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id +
                                     '  ' + str(LenFile).strip("") + '  ' + str(LenPart).strip("") + '  ' + str(FileName).strip("") +
                                     '  ' + str(Filemd5_i).strip(""), "00")
                                 self.print_trigger.emit("", "00")  # Space
 
-                                response_message = recvall(self.tracker, 4)
+                                response_message = recvall(self.tracker, 4).decode('ascii')
 
                             except Exception as e:
                                 self.print_trigger.emit('Error: ' + str(e), '01')
@@ -221,7 +221,7 @@ class Client(object):
 
                             if response_message[:4] == 'AADR':
 
-                                part_n = int(recvall(self.tracker, 8))
+                                part_n = int(recvall(self.tracker, 8)).decode('ascii')
                                 self.print_trigger.emit(
                                     '<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] + '  ' +
                                     str(part_n), '02')
@@ -267,7 +267,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.send(msg).encode("utf-8")
+            self.tracker.send(msg.encode('utf-8'))
             self.print_trigger.emit(
                 '=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' + self.session_id +
                 '  ' + ricerca.ljust(20), "00")
@@ -438,7 +438,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.sendall(msg).encode("utf-8")
+            self.tracker.sendall(msg.encode('utf-8'))
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' +
                                     self.session_id + '  ' + file['md5'], "00")
             self.print_trigger.emit("", "00")  # Space
@@ -669,13 +669,12 @@ class Client(object):
             response_message = None
             try:
 
-                download.send(msg).encode("utf-8")
+                download.send(msg.encode('utf-8'))
                 self.print_trigger.emit('=> ' + str(download.getpeername()[0]) + '  ' + msg[0:4] + '  ' +
                                         md5 + '  ' + msg[36:], "00")
                 self.print_trigger.emit("", "00")  # Space
 
                 response_message = recvall(download, 4).decode('ascii')
-
 
             except Exception as e:
                 self.print_trigger.emit('Error: ' + str(e), '01')
@@ -695,7 +694,7 @@ class Client(object):
                     for i in range(0, n_chunks):
                         try:
                             chunk_length = recvall(download, 5).decode('ascii')  # Ricezione dal peer la lunghezza della parte di file
-                            data += recvall(download, int(chunk_length))  # Ricezione dal peer la parte del file
+                            data += recvall(download, int(chunk_length)) .decode('ascii') # Ricezione dal peer la parte del file
 
                             # Updating progress bar
                             progress = round(float(i) * 100 / float(n_chunks), 0)
@@ -745,7 +744,7 @@ class Client(object):
         try:
             self.check_connection()
 
-            self.tracker.sendall(msg).encode("utf-8")
+            self.tracker.sendall(msg.encode('utf-8'))
             self.print_trigger.emit('=> ' + str(self.tracker.getpeername()[0]) + '  ' + msg[0:4] + '  ' +
                                     self.session_id + '  ' + md5 + '  ' + str(n_part), "00")
             self.print_trigger.emit("", "00")  # Space
