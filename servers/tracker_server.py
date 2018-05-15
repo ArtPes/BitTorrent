@@ -18,11 +18,11 @@ class Tracker_Server(threading.Thread):
         Peer: non utilizzata
     """
 
-    def __init__(self, client, address, dbConnect, output_lock, print_trigger, my_ipv4, my_ipv6, my_port):
+    def __init__(self, arg, dbConnect, output_lock, print_trigger, my_ipv4, my_ipv6, my_port):
         # QtCore.QThread.__init__(self, parent=None)
         threading.Thread.__init__(self)
-        self.client = client
-        self.address = address
+        self.client = arg[0]
+        self.address = arg[1]
         self.size = 1024
         self.dbConnect = dbConnect
         self.output_lock = output_lock

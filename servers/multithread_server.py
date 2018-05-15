@@ -60,7 +60,8 @@ class Server(threading.Thread, QtCore.QThread):
                         if port == self.port_dir:
                             try:
                                 # handle the server socket
-                                c = Tracker_Server(item.accept()[0], item.accept()[1], self.dbConnect, self.output_lock, self.print_trigger, config.my_ipv4,
+
+                                c = Tracker_Server(item.accept(), self.dbConnect, self.output_lock, self.print_trigger, config.my_ipv4,
                                                    config.my_ipv6, config.my_port)
                                 c.start()
                                 self.threads.append(c)

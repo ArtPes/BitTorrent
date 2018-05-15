@@ -2,6 +2,7 @@
 import socket
 import random
 
+
 class Connection:
     """
     Crea le connessioni a directory e peers
@@ -50,37 +51,7 @@ class Connection:
             except Exception as msg:
                 self.print_trigger.emit("Connection Error: %s" % msg, self.print_mode + "1")
 
-    '''
-    def listen_v4(self):
-        """
-        Crea una socket TCP ipv4 in ascolto sull'indirizzo e porta specificati
-        Da utilizzare per le richieste degli altri peer
-        """
 
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                 # creazione socket ipv4
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        try:
-            self.socket.bind((self.ipv4, self.port))                                    # inizializzazione della connessione
-            self.socket.listen(5)
-            output(self.out_lck, "Listening on :" + self.ipv4 + str(self.port))
-        except socket.error, msg:
-            output(self.out_lck, "Connection error ipv4!\nTerminated.\nSocket.error : %s" % str(msg))
-
-    def listen_v6(self):
-        """
-        Crea una socket TCP ipv6 in ascolto sull'indirizzo e porta specificati
-        Da utilizzare per le richieste degli altri peer
-        """
-
-        self.socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)                # creazione socket ipv6
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        try:
-            self.socket.bind((self.ipv6, self.port))                                    # inizializzazione della connessione
-            self.socket.listen(5)
-            output(self.out_lck, "Listening on :" + self.ipv6 + str(self.port))
-        except socket.error, msg:
-            output(self.out_lck, "Connection error ipv6!\nTerminated.\nSocket.error : %s" % str(msg))
-    '''
 def add_zero(ip):                                  # aggiunge 0 davanti
     li = ip.split(".")
     a = li[0].zfill(3)
