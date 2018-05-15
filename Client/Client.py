@@ -221,7 +221,7 @@ class Client(object):
 
                             if response_message[:4] == 'AADR':
 
-                                part_n = int(recvall(self.tracker, 8)).decode('ascii')
+                                part_n = int(recvall(self.tracker, 8).decode('ascii'))
                                 self.print_trigger.emit(
                                     '<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] + '  ' +
                                     str(part_n), '02')

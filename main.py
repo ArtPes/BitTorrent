@@ -52,21 +52,21 @@ class Main(QtCore.QThread):
                                                                                                       "Set part length"])
                 if int_option == 1:
                     client.login()
-
-                    int_option = loop_menu(out_lck, "Select one of the following options ('e' to exit): ", ["Add file",
-                                                                                                            "Search file",
-                                                                                                            "Logout"])
-                    if int_option == 1:
-                        # scelgo un file dalla cartella e lo aggiungo al tracker
-                        client.share()
-                    elif int_option == 2:
-                        # creo una query e la invio al tracker
-                        client.look()
-                    elif int_option == 3:
-                        client.logout()
-                        output(out_lck, 'Logout completed.')
-                    else:
-                        output(out_lck, "Option " + str(int_option) + " not available")
+                    while int_option != 3:
+                        int_option = loop_menu(out_lck, "Select one of the following options ('e' to exit): ", ["Add file",
+                                                                                                                "Search file",
+                                                                                                                "Logout"])
+                        if int_option == 1:
+                            # scelgo un file dalla cartella e lo aggiungo al tracker
+                            client.share()
+                        elif int_option == 2:
+                            # creo una query e la invio al tracker
+                            client.look()
+                        elif int_option == 3:
+                            client.logout()
+                            output(out_lck, 'Logout completed.')
+                        else:
+                            output(out_lck, "Option " + str(int_option) + " not available")
 
                 elif int_option == 2:
                     client.parallel_downloads = loop_int_input(out_lck, "Insert the number of parallel downloads: ")
