@@ -10,6 +10,7 @@ from multiprocessing import Pool
 from .DownloadingThreadPool import ThreadPool
 from bitstring import BitArray
 
+
 class Client(object):
 
     session_id = None
@@ -383,7 +384,6 @@ class Client(object):
                             output(self.out_lck, "1: Yes")
                             output(self.out_lck, "2: No")
 
-
                             start_download = None
                             while start_download is None:
                                 try:
@@ -475,14 +475,14 @@ class Client(object):
                         printable_response += hitpeer_ipv6.decode('ascii') + '  '
                         hitpeer_port = recvall(self.tracker, 5)
                         printable_response += hitpeer_port.decode('ascii') + '  '
-                        hitpeer_partlist = BitArray(recvall(self.tracker, n_parts8))
-                        printable_response += hitpeer_partlist.bin + '  '
+                        hitpeer_partlist = recvall(self.tracker, n_parts8).decode('ascii')
+                        printable_response += hitpeer_partlist + '  '
 
                         hitpeers.append({
                             "ipv4": hitpeer_ipv4,
                             "ipv6": hitpeer_ipv6,
                             "port": hitpeer_port,
-                            "part_list": hitpeer_partlist.bin
+                            "part_list": hitpeer_partlist
                         })
 
                     self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + printable_response, '02')

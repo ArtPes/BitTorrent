@@ -9,6 +9,7 @@ import threading
 from dbmodules.dbconnection import *
 from helpers import *
 from PyQt5 import QtCore, QtGui, QtWidgets
+import bitstring
 
 
 class Tracker_Server(threading.Thread):
@@ -226,10 +227,10 @@ class Tracker_Server(threading.Thread):
                         # li mette all'inizio e cambia il significato della partlist
                         for part in parts_8:
                             if len(part) == 8:
-                                ascii_part_list += chr(int(part, 2))
+                                ascii_part_list += str(part)
                             else:
                                 part = part.ljust(8, "0")
-                                ascii_part_list += chr(int(part, 2))
+                                ascii_part_list += str(part)
 
                         #print ascii_part_list
 
@@ -238,7 +239,8 @@ class Tracker_Server(threading.Thread):
                                      "  " + str(ascii_part_list)
 
                     try:
-                        conn.sendall(msg.encode('utf-8'))
+                        msg = msg.encode('utf-8')
+                        conn.sendall(msg)
 
                         self.print_trigger.emit(
                             "=> " + str(conn.getpeername()[0]) + "  " + print_msg, "12")
