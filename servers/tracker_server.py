@@ -41,6 +41,7 @@ class Tracker_Server(threading.Thread):
         else:
             while len(cmd) > 0:
 
+
                 if cmd[:4] == 'LOGI':
                     # IPP2P:RND <> IPT:3000
                     # > “LOGI”[4B].IPP2P[55B].PP2P[5B]
