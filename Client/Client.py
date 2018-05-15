@@ -1,7 +1,7 @@
 # coding=utf-8
+import math
 import time
-import math, time
-from . import SharedFile
+from .SharedFile import SharedFile
 from helpers import connection
 from helpers.scheduler import Scheduler
 from helpers.helpers import *
@@ -74,7 +74,7 @@ class Client(object):
                 self.my_ipv6 + '  ' + str(self.my_port).zfill(5), "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 20)  # Risposta della directory, deve contenere ALGI e il session id
+            response_message = recvall(self.tracker, 20).decode('ascii')  # Risposta della directory, deve contenere ALGI e il session id
             # stampo nella grafica la risposta
             self.print_trigger.emit(
                 '<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] + '  ' + response_message[4:20],
@@ -119,7 +119,7 @@ class Client(object):
                                     "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 14)
+            response_message = recvall(self.tracker, 14).decode('ascii')
             n_parts = response_message[4:14]
             tot_parts = self.dbConnect.number_part(self.session_id)
 
@@ -169,7 +169,7 @@ class Client(object):
                 output(self.out_lck, str(idx) + ": " + file.name)
 
             try:
-                option = raw_input()
+                option = input()
             except SyntaxError:
                 option = None
 
@@ -251,7 +251,7 @@ class Client(object):
         ricerca = None
         while ricerca is None:
             try:
-                ricerca = raw_input()  # Inserimento del parametro di ricerca
+                ricerca = input()  # Inserimento del parametro di ricerca
             except SyntaxError:
                 ricerca = None
 
@@ -273,7 +273,7 @@ class Client(object):
                 '  ' + ricerca.ljust(20), "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 4)
+            response_message = recvall(self.tracker, 4).decode('ascii')
             printable_response = response_message + '  '
 
         except Exception as e:
@@ -287,7 +287,7 @@ class Client(object):
 
             idmd5 = None
             try:
-                idmd5 = recvall(self.tracker, 3)  # Numero di identificativi md5
+                idmd5 = recvall(self.tracker, 3).decode('ascii')  # Numero di identificativi md5
 
             except Exception as e:
                 self.print_trigger.emit('Error: ' + str(e), '01')
@@ -313,13 +313,13 @@ class Client(object):
                             for idx in range(0, idmd5):  # Per ogni identificativo diverso si ricevono:
                                 # md5, nome del file, numero di copie, elenco dei peer che l'hanno condiviso
 
-                                file_i_md5 = recvall(self.tracker, 32)
+                                file_i_md5 = recvall(self.tracker, 32).decode('ascii')
                                 printable_response += file_i_md5 + '  '
-                                file_i_name = recvall(self.tracker, 100).strip()
+                                file_i_name = recvall(self.tracker, 100).decode('ascii').strip()
                                 printable_response += file_i_name + '  '
-                                len_file_i = recvall(self.tracker, 10)
+                                len_file_i = recvall(self.tracker, 10).decode('ascii')
                                 printable_response += len_file_i + '  '
-                                len_part_i = recvall(self.tracker, 6)
+                                len_part_i = recvall(self.tracker, 6).decode('ascii')
                                 printable_response += len_part_i + '  '
 
                                 available_files.append({"name": file_i_name,
@@ -346,7 +346,7 @@ class Client(object):
                             selected_file = None
                             while selected_file is None:
                                 try:
-                                    option = raw_input()  # Selezione del file da scaricare
+                                    option = input()  # Selezione del file da scaricare
                                 except SyntaxError:
                                     option = None
 
@@ -361,8 +361,7 @@ class Client(object):
                                     except ValueError:
                                         output(self.out_lck, "A number is required")
 
-                            file_to_download = available_files[
-                                selected_file]  # Recupero del file selezionato dalla lista dei risultati
+                            file_to_download = available_files[selected_file]  # Recupero del file selezionato dalla lista dei risultati
 
                             self.procedure_lck.release()
 
@@ -388,7 +387,7 @@ class Client(object):
                             start_download = None
                             while start_download is None:
                                 try:
-                                    option = raw_input()
+                                    option = input()
                                 except SyntaxError:
                                     option = None
 
@@ -444,7 +443,7 @@ class Client(object):
                                     self.session_id + '  ' + file['md5'], "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 4)
+            response_message = recvall(self.tracker, 4).decode('ascii')
             printable_response = response_message + '  '
 
         except Exception as e:
@@ -457,7 +456,8 @@ class Client(object):
             self.fetching = False
 
         elif response_message[0:4] == 'AFCH':
-            n_hitpeers = recvall(self.tracker, 3)
+            # numero di peer che hanno interesse nel file selezionato
+            n_hitpeers = recvall(self.tracker, 3).decode('ascii')
             try:
                 printable_response += n_hitpeers + '  '
                 n_hitpeers = int(n_hitpeers)
@@ -467,14 +467,15 @@ class Client(object):
                 if n_hitpeers is not None and n_hitpeers > 0:
                     hitpeers = []
 
+                    # aggiorno la lista di hitpeers
                     for i in range(0, n_hitpeers):
-                        hitpeer_ipv4 = recvall(self.tracker, 16).replace("|", "")
+                        hitpeer_ipv4 = recvall(self.tracker, 16).decode('ascii').replace("|", "")
                         printable_response += hitpeer_ipv4 + '  '
-                        hitpeer_ipv6 = recvall(self.tracker, 39)
+                        hitpeer_ipv6 = recvall(self.tracker, 39).decode('ascii')
                         printable_response += hitpeer_ipv6 + '  '
-                        hitpeer_port = recvall(self.tracker, 5)
+                        hitpeer_port = recvall(self.tracker, 5).decode('ascii')
                         printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, n_parts8)
+                        hitpeer_partlist = recvall(self.tracker, n_parts8).decode('ascii')
                         printable_response += hitpeer_partlist + '  '
 
                         hitpeers.append({
@@ -673,7 +674,7 @@ class Client(object):
                                         md5 + '  ' + msg[36:], "00")
                 self.print_trigger.emit("", "00")  # Space
 
-                response_message = recvall(download, 4)
+                response_message = recvall(download, 4).decode('ascii')
 
 
             except Exception as e:
@@ -681,7 +682,7 @@ class Client(object):
 
             else:
                 if response_message[:4] == 'AREP':
-                    n_chunks = recvall(download, 6)  # Numero di parti del file da scaricare
+                    n_chunks = recvall(download, 6).decode('ascii')  # Numero di parti del file da scaricare
 
                     self.print_trigger.emit('<= ' + str(download.getpeername()[0]) + '  ' + response_message[0:4] +
                                             '  ' + n_chunks, '02')
@@ -693,7 +694,7 @@ class Client(object):
 
                     for i in range(0, n_chunks):
                         try:
-                            chunk_length = recvall(download, 5)  # Ricezione dal peer la lunghezza della parte di file
+                            chunk_length = recvall(download, 5).decode('ascii')  # Ricezione dal peer la lunghezza della parte di file
                             data += recvall(download, int(chunk_length))  # Ricezione dal peer la parte del file
 
                             # Updating progress bar
@@ -749,7 +750,7 @@ class Client(object):
                                     self.session_id + '  ' + md5 + '  ' + str(n_part), "00")
             self.print_trigger.emit("", "00")  # Space
             # output(self.out_lck, msg)
-            response_message = recvall(self.tracker, 4)
+            response_message = recvall(self.tracker, 4).decode('ascii')
 
         except Exception as e:
             self.print_trigger.emit('Error: ' + str(e), '01')
@@ -758,7 +759,7 @@ class Client(object):
             output(self.out_lck, 'No response from tracker. Download failed')
             self.procedure_lck.release()
         elif response_message[0:4] == 'APAD':
-            num_part = recvall(self.tracker, 8)
+            num_part = recvall(self.tracker, 8).decode('ascii')
             self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] +
                                     '  ' + num_part, '02')
             self.print_trigger.emit("", "00")  # Space

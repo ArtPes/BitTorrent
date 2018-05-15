@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(Ui_MainWindow, self).__init__(parent)
-        self.setObjectName(_fromUtf8("MainWindow"))
+        self.setObjectName(_fromUtf8("BitTorrent"))
         self.resize(800, 600)
         self.setMinimumSize(QtCore.QSize(600, 350))
         self.setMaximumSize(QtCore.QSize(1200, 650))

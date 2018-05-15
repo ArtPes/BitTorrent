@@ -54,7 +54,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(self)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("BitTorrent", "BitTorrent", None))
         self.label.setText(_translate("MainWindow", "Donwloading file <filename>", None))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Part n°", None))
