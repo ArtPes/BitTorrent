@@ -428,7 +428,7 @@ class Client(object):
 
         n_parts = int(math.ceil(float(file['len_file']) / float(file['len_part'])))  # 1024
 
-        n_parts8 = int(math.ceil(float(float(n_parts)/8)))  # 128
+        n_parts8 = int(math.ceil(float(n_parts/8)))  # 128
 
         output(self.out_lck, "\nFetching parts informations about file " + file['name'])
         msg = "FCHU" + self.session_id + file['md5']
@@ -475,7 +475,7 @@ class Client(object):
                         printable_response += hitpeer_ipv6 + '  '
                         hitpeer_port = recvall(self.tracker, 5).decode("utf-8")
                         printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, n_parts8)
+                        hitpeer_partlist = recvall(self.tracker, 2*n_parts8).decode('utf8')
                         #printable_response += hitpeer_partlist.decode('utf-8') + '  '
 
                         hitpeers.append({
@@ -505,8 +505,8 @@ class Client(object):
                             # VALIDO PER part_list salvata come stringa di caratteri ASCII
 
                             for c in hp['part_list']:
-                                bits = ''.join(format(ord(x), 'b') for x in c)
-                                #bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
+                                #bits = ''.join(format(ord(x), 'b') for x in str(c))
+                                bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
                                 for bit in bits:
 
                                     if int(bit) == 1:  # se la parte è disponibile
