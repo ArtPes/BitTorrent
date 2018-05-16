@@ -1,9 +1,6 @@
 # coding=utf-8
 import math
 import time
-
-from bitarray import bitarray
-
 from .SharedFile import SharedFile
 from helpers import connection
 from helpers.scheduler import Scheduler
@@ -12,9 +9,6 @@ import threading, json, collections
 from multiprocessing import Pool
 from .DownloadingThreadPool import ThreadPool
 from bitstring import BitArray
-
-import binascii
-
 
 
 class Client(object):
@@ -511,10 +505,8 @@ class Client(object):
                             # VALIDO PER part_list salvata come stringa di caratteri ASCII
 
                             for c in hp['part_list']:
+                                bits = ''.join(format(ord(x), 'b') for x in c)
                                 #bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
-                                #bits = bin(int(c,16))[2:]
-                                bits = ascii(c)
-
                                 for bit in bits:
 
                                     if int(bit) == 1:  # se la parte è disponibile

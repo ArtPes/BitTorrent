@@ -18,8 +18,8 @@ class Server(threading.Thread, QtCore.QThread):
         QtCore.QThread.__init__(self, parent)
         threading.Thread.__init__(self)
         self.host = ''
-        self.port_peer = 6000
-        self.port_dir = 3000
+        self.port_peer = int(config.my_port)
+        self.port_dir = int(config.track_port)
         self.backlog = 100
         self.size = 1024
         self.server = None

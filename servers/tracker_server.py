@@ -227,10 +227,10 @@ class Tracker_Server(threading.Thread):
                         # li mette all'inizio e cambia il significato della partlist
                         for part in parts_8:
                             if len(part) == 8:
-                                ascii_part_list += chr(int(part,2))
+                                ascii_part_list += chr(int(part, 2))
                             else:
                                 part = part.ljust(8, "0")
-                                ascii_part_list += chr(int(part,2))
+                                ascii_part_list += chr(int(part, 2))
 
                         #print ascii_part_list
 
@@ -279,7 +279,7 @@ class Tracker_Server(threading.Thread):
                     except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(response), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e, '11')
+                        self.print_trigger.emit('Error: ' + str(e), '11')
 
                     self.print_trigger.emit("Part " + str(num_part) + " succesfully downloaded by " + str(self.address[0]), "12")
                     # Spazio
