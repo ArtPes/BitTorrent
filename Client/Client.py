@@ -428,7 +428,7 @@ class Client(object):
 
         n_parts = int(math.ceil(float(file['len_file']) / float(file['len_part'])))  # 1024
 
-        n_parts8 = int(math.ceil(float(float(n_parts))))  # 128
+        n_parts8 = int(math.ceil(float(float(n_parts)/8)))  # 128
 
         output(self.out_lck, "\nFetching parts informations about file " + file['name'])
         msg = "FCHU" + self.session_id + file['md5']
@@ -471,12 +471,12 @@ class Client(object):
                     for i in range(0, n_hitpeers):
                         hitpeer_ipv4 = recvall(self.tracker, 16).decode('ascii').replace("|", "")
                         printable_response += hitpeer_ipv4 + '  '
-                        hitpeer_ipv6 = recvall(self.tracker, 39)
-                        printable_response += hitpeer_ipv6.decode('ascii') + '  '
-                        hitpeer_port = recvall(self.tracker, 5)
-                        printable_response += hitpeer_port.decode('ascii') + '  '
-                        hitpeer_partlist = recvall(self.tracker, n_parts8).decode('ascii')
-                        printable_response += hitpeer_partlist + '  '
+                        hitpeer_ipv6 = recvall(self.tracker, 39).decode('ascii')
+                        printable_response += hitpeer_ipv6 + '  '
+                        hitpeer_port = recvall(self.tracker, 5).decode('ascii')
+                        printable_response += hitpeer_port + '  '
+                        hitpeer_partlist = recvall(self.tracker, n_parts8)
+                        printable_response += hitpeer_partlist.decode('ascii') + '  '
 
                         hitpeers.append({
                             "ipv4": hitpeer_ipv4,
