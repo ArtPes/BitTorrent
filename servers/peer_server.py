@@ -36,7 +36,7 @@ class Peer_Server(threading.Thread):
         conn = self.client
         #cmd = recvall(conn, self.size)
         try:
-            cmd = conn.recv(self.size).decode("ascii")
+            cmd = conn.recv(self.size).decode("utf-8")
         except socket.error:
             pass
         else:

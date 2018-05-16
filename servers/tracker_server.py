@@ -36,7 +36,7 @@ class Tracker_Server(threading.Thread):
         conn = self.client
         #cmd = recvall(conn, self.size)
         try:
-            cmd = conn.recv(self.size).decode("ascii")
+            cmd = conn.recv(self.size).decode("utf-8")
         except socket.error:
             pass
         else:
@@ -227,10 +227,10 @@ class Tracker_Server(threading.Thread):
                         # li mette all'inizio e cambia il significato della partlist
                         for part in parts_8:
                             if len(part) == 8:
-                                ascii_part_list += str(part)
+                                ascii_part_list += chr(int(part,2))
                             else:
                                 part = part.ljust(8, "0")
-                                ascii_part_list += str(part)
+                                ascii_part_list += chr(int(part,2))
 
                         #print ascii_part_list
 
@@ -239,6 +239,9 @@ class Tracker_Server(threading.Thread):
                                      "  " + str(ascii_part_list)
 
                     try:
+                        print(str(ascii_part_list))
+                        print(str(ascii_part_list).encode('utf-8'))
+                        print(str(ascii_part_list).encode('utf-8').decode('utf-8'))
                         msg = msg.encode('utf-8')
                         conn.sendall(msg)
 
@@ -250,7 +253,7 @@ class Tracker_Server(threading.Thread):
                     except socket.error as msg:
                         self.print_trigger.emit('Socket Error: ' + str(msg), '11')
                     except Exception as e:
-                        self.print_trigger.emit('Error: ' + e, '11')
+                        self.print_trigger.emit('Error: ' + str(e), '11')
 
                 elif cmd[:4] == 'RPAD':
                     # IPP2P:RND <> IPT:3000
@@ -286,6 +289,6 @@ class Tracker_Server(threading.Thread):
                     self.print_trigger.emit("\nError: Command" + cmd + " not recognized", '11')
 
                 try:
-                    cmd = conn.recv(self.size).decode("ascii")
+                    cmd = conn.recv(self.size).decode("utf-8")
                 except socket.error:
                     pass

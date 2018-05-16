@@ -81,7 +81,7 @@ class Client(object):
                 self.my_ipv6 + '  ' + str(self.my_port).zfill(5), "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 20).decode('ascii')  # Risposta della directory, deve contenere ALGI e il session id
+            response_message = recvall(self.tracker, 20).decode("utf-8")  # Risposta della directory, deve contenere ALGI e il session id
             # stampo nella grafica la risposta
             self.print_trigger.emit(
                 '<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] + '  ' + response_message[4:20],
@@ -126,7 +126,7 @@ class Client(object):
                                     "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 14).decode('ascii')
+            response_message = recvall(self.tracker, 14).decode("utf-8")
             n_parts = response_message[4:14]
             tot_parts = self.dbConnect.number_part(self.session_id)
 
@@ -220,7 +220,7 @@ class Client(object):
                                     '  ' + str(Filemd5_i).strip(""), "00")
                                 self.print_trigger.emit("", "00")  # Space
 
-                                response_message = recvall(self.tracker, 4).decode('ascii')
+                                response_message = recvall(self.tracker, 4).decode("utf-8")
 
                             except Exception as e:
                                 self.print_trigger.emit('Error: ' + str(e), '01')
@@ -228,7 +228,7 @@ class Client(object):
 
                             if response_message[:4] == 'AADR':
 
-                                part_n = int(recvall(self.tracker, 8).decode('ascii'))
+                                part_n = int(recvall(self.tracker, 8).decode("utf-8"))
                                 self.print_trigger.emit(
                                     '<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] + '  ' +
                                     str(part_n), '02')
@@ -280,7 +280,7 @@ class Client(object):
                 '  ' + ricerca.ljust(20), "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 4).decode('ascii')
+            response_message = recvall(self.tracker, 4).decode("utf-8")
             printable_response = response_message + '  '
 
         except Exception as e:
@@ -294,7 +294,7 @@ class Client(object):
 
             idmd5 = None
             try:
-                idmd5 = recvall(self.tracker, 3).decode('ascii')  # Numero di identificativi md5
+                idmd5 = recvall(self.tracker, 3).decode("utf-8")  # Numero di identificativi md5
 
             except Exception as e:
                 self.print_trigger.emit('Error: ' + str(e), '01')
@@ -320,13 +320,13 @@ class Client(object):
                             for idx in range(0, idmd5):  # Per ogni identificativo diverso si ricevono:
                                 # md5, nome del file, numero di copie, elenco dei peer che l'hanno condiviso
 
-                                file_i_md5 = recvall(self.tracker, 32).decode('ascii')
+                                file_i_md5 = recvall(self.tracker, 32).decode("utf-8")
                                 printable_response += file_i_md5 + '  '
-                                file_i_name = recvall(self.tracker, 100).decode('ascii').strip()
+                                file_i_name = recvall(self.tracker, 100).decode("utf-8").strip()
                                 printable_response += file_i_name + '  '
-                                len_file_i = recvall(self.tracker, 10).decode('ascii')
+                                len_file_i = recvall(self.tracker, 10).decode("utf-8")
                                 printable_response += len_file_i + '  '
-                                len_part_i = recvall(self.tracker, 6).decode('ascii')
+                                len_part_i = recvall(self.tracker, 6).decode("utf-8")
                                 printable_response += len_part_i + '  '
 
                                 available_files.append({"name": file_i_name,
@@ -449,7 +449,7 @@ class Client(object):
                                     self.session_id + '  ' + file['md5'], "00")
             self.print_trigger.emit("", "00")  # Space
 
-            response_message = recvall(self.tracker, 4).decode('ascii')
+            response_message = recvall(self.tracker, 4).decode("utf-8")
             printable_response = response_message + '  '
 
         except Exception as e:
@@ -463,7 +463,7 @@ class Client(object):
 
         elif response_message[0:4] == 'AFCH':
             # numero di peer che hanno interesse nel file selezionato
-            n_hitpeers = recvall(self.tracker, 3).decode('ascii')
+            n_hitpeers = recvall(self.tracker, 3).decode("utf-8")
             try:
                 printable_response += n_hitpeers + '  '
                 n_hitpeers = int(n_hitpeers)
@@ -475,11 +475,11 @@ class Client(object):
 
                     # aggiorno la lista di hitpeers
                     for i in range(0, n_hitpeers):
-                        hitpeer_ipv4 = recvall(self.tracker, 16).decode('ascii').replace("|", "")
+                        hitpeer_ipv4 = recvall(self.tracker, 16).decode("utf-8").replace("|", "")
                         printable_response += hitpeer_ipv4 + '  '
-                        hitpeer_ipv6 = recvall(self.tracker, 39).decode('ascii')
+                        hitpeer_ipv6 = recvall(self.tracker, 39).decode("utf-8")
                         printable_response += hitpeer_ipv6 + '  '
-                        hitpeer_port = recvall(self.tracker, 5).decode('ascii')
+                        hitpeer_port = recvall(self.tracker, 5).decode("utf-8")
                         printable_response += hitpeer_port + '  '
                         hitpeer_partlist = recvall(self.tracker, n_parts8)
                         #printable_response += hitpeer_partlist.decode('utf-8') + '  '
@@ -683,14 +683,14 @@ class Client(object):
                                         md5 + '  ' + msg[36:], "00")
                 self.print_trigger.emit("", "00")  # Space
 
-                response_message = recvall(download, 4).decode('ascii')
+                response_message = recvall(download, 4).decode("utf-8")
 
             except Exception as e:
                 self.print_trigger.emit('Error: ' + str(e), '01')
 
             else:
                 if response_message[:4] == 'AREP':
-                    n_chunks = recvall(download, 6).decode('ascii')  # Numero di parti del file da scaricare
+                    n_chunks = recvall(download, 6).decode("utf-8")  # Numero di parti del file da scaricare
 
                     self.print_trigger.emit('<= ' + str(download.getpeername()[0]) + '  ' + response_message[0:4] +
                                             '  ' + n_chunks, '02')
@@ -702,8 +702,8 @@ class Client(object):
 
                     for i in range(0, n_chunks):
                         try:
-                            chunk_length = recvall(download, 5).decode('ascii')  # Ricezione dal peer la lunghezza della parte di file
-                            data += recvall(download, int(chunk_length)) .decode('ascii') # Ricezione dal peer la parte del file
+                            chunk_length = recvall(download, 5).decode("utf-8")  # Ricezione dal peer la lunghezza della parte di file
+                            data += recvall(download, int(chunk_length)) .decode("utf-8") # Ricezione dal peer la parte del file
 
                             # Updating progress bar
                             progress = round(float(i) * 100 / float(n_chunks), 0)
@@ -758,7 +758,7 @@ class Client(object):
                                     self.session_id + '  ' + md5 + '  ' + str(n_part), "00")
             self.print_trigger.emit("", "00")  # Space
             # output(self.out_lck, msg)
-            response_message = recvall(self.tracker, 4).decode('ascii')
+            response_message = recvall(self.tracker, 4).decode("utf-8")
 
         except Exception as e:
             self.print_trigger.emit('Error: ' + str(e), '01')
@@ -767,7 +767,7 @@ class Client(object):
             output(self.out_lck, 'No response from tracker. Download failed')
             self.procedure_lck.release()
         elif response_message[0:4] == 'APAD':
-            num_part = recvall(self.tracker, 8).decode('ascii')
+            num_part = recvall(self.tracker, 8).decode("utf-8")
             self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + response_message[0:4] +
                                     '  ' + num_part, '02')
             self.print_trigger.emit("", "00")  # Space
