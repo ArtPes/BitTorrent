@@ -20,5 +20,6 @@ Eseguire dal terminale:
 * **ArtPes** - (https://github.com/ArtPes)
 * **lovalova91** - (https://github.com/lovalova1991)
 * **padovanl** - (https://github.com/padovanl)
+* **lucia-rignanese** - (https://github.com/lucia-rignanese)
 
 See also the list of [contributors](https://github.com/ArtPes/BitTorrent/graphs/contributors) who participated in this project.
