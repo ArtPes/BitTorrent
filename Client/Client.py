@@ -690,12 +690,12 @@ class Client(object):
 
                     # Rimozione gli 0 dal numero di parti e converte in intero
                     n_chunks = int(str(n_chunks).lstrip('0'))
-                    data = ''
+                    data = b''
 
                     for i in range(0, n_chunks):
                         try:
-                            chunk_length = recvall(download, 5).decode("utf-8")  # Ricezione dal peer la lunghezza della parte di file
-                            data += recvall(download, int(chunk_length)) .decode("utf-8") # Ricezione dal peer la parte del file
+                            chunk_length = recvall(download, 5).decode("ascii")  # Ricezione dal peer la lunghezza della parte di file
+                            data += recvall(download, int(chunk_length)) # Ricezione dal peer la parte del file
 
                             # Updating progress bar
                             progress = round(float(i) * 100 / float(n_chunks), 0)

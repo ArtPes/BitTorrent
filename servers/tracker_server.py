@@ -239,10 +239,14 @@ class Tracker_Server(threading.Thread):
                                      "  " + str(ascii_part_list)
 
                     try:
+
                         print(str(ascii_part_list))
+                        print("Lunghezza: ",str(len(ascii_part_list)))
                         print(str(ascii_part_list).encode('utf-8'))
                         print(str(ascii_part_list).encode('utf-8').decode('utf-8'))
+                        print("\n")
                         msg = msg.encode('utf-8')
+
                         conn.sendall(msg)
 
                         self.print_trigger.emit(
