@@ -5,11 +5,12 @@
 # Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
+#from PyQt4.QtGui import QApplication
 
 try:
-    _fromUtf8 = lambda s: s
+
+    _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     def _fromUtf8(s):
         return s
@@ -26,20 +27,20 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(Ui_MainWindow, self).__init__(parent)
         self.setObjectName(_fromUtf8("BitTorrent"))
-        self.resize(800, 600)
+        self.resize(1500, 1100)
         self.setMinimumSize(QtCore.QSize(600, 350))
-        self.setMaximumSize(QtCore.QSize(1200, 650))
+        self.setMaximumSize(QtCore.QSize(2000, 1800))
         self.centralwidget = QtWidgets.QWidget(self)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
-        self.centralwidget.setMinimumSize(QtCore.QSize(600, 300))
-        self.centralwidget.setMaximumSize(QtCore.QSize(1200, 600))
+        self.centralwidget.setMinimumSize(QtCore.QSize(1500, 1100))
+        self.centralwidget.setMaximumSize(QtCore.QSize(1900, 1700))
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(9, 9, 781, 581))
+        self.widget.setGeometry(QtCore.QRect(9, 9, 1400, 1100))
         self.widget.setObjectName(_fromUtf8("widget"))
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
@@ -49,7 +50,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.label = QtWidgets.QLabel(self.widget)
-        self.label.setMaximumSize(QtCore.QSize(40, 20))
+        self.label.setMaximumSize(QtCore.QSize(70, 50))
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.label_1 = QtWidgets.QLabel(self.widget)
@@ -61,13 +62,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.client = QtWidgets.QTextBrowser(self.widget)
-        self.client.setMinimumSize(QtCore.QSize(300, 200))
-        self.client.setMaximumSize(QtCore.QSize(600, 600))
+        self.client.setMinimumSize(QtCore.QSize(1000, 300))
+        self.client.setMaximumSize(QtCore.QSize(1000, 400))
         self.client.setObjectName(_fromUtf8("client"))
         self.gridLayout_2.addWidget(self.client, 0, 0, 1, 1)
         self.server = QtWidgets.QTextBrowser(self.widget)
-        self.server.setMinimumSize(QtCore.QSize(300, 200))
-        self.server.setMaximumSize(QtCore.QSize(600, 600))
+        self.server.setMinimumSize(QtCore.QSize(1000, 300))
+        self.server.setMaximumSize(QtCore.QSize(1000, 400))
         self.server.setObjectName(_fromUtf8("server"))
         self.gridLayout_2.addWidget(self.server, 0, 1, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout_2, 1, 0, 1, 1)
@@ -164,11 +165,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             row = self.tableWidget.rowCount() - 1
 
-            item = QtWidgets.QTableWidgetItem(part_n)
+            item = QtWidgets.QTableWidgetItem(str(part_n))
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.tableWidget.setItem(row, 0, item)
 
-            item = QtWidgets.QTableWidgetItem(source)
+            item = QtWidgets.QTableWidgetItem(str(source))
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.tableWidget.setItem(row, 1, item)
 
