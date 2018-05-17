@@ -140,8 +140,8 @@ class Peer_Server(threading.Thread):
 
                             if len(buff) != 0:  # Invio dell'eventuale resto, se più piccolo di chunk_size
                                 try:
-                                    msg = str(len(buff)).zfill(5) + buff
-                                    conn.sendall(msg.encode('utf-8'))
+                                    msg = str(len(buff)).zfill(5).encode('utf-8') + buff
+                                    conn.sendall(msg)
 
                                 except socket.error as msg:
                                     self.print_trigger.emit("Connection Error: %s" % msg, '11')

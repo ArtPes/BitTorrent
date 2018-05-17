@@ -625,7 +625,7 @@ class Client(object):
                     list_parts.append("./received/temp/" + f)
 
             output(self.out_lck, "Joining parts")
-            join_parts_mac(list_parts, "./received/" + file_name)
+            join_parts(list_parts, "./received/" + file_name)
 
             self.download_progress_trigger.emit(100, file_name)
 
