@@ -123,8 +123,8 @@ class Peer_Server(threading.Thread):
 
                             while len(buff) == chunk_size:  # Invio dei chunks
                                 try:
-                                    msg = str(len(buff)).zfill(5) + buff
-                                    conn.sendall(msg.encode('utf-8'))  # Invio di
+                                    msg = str(len(buff)).zfill(5).encode('utf-8') + buff
+                                    conn.sendall(msg)  # Invio di
                                     chunks_sent += 1
 
                                     #output(self.output_lock, str(part_num) + " : " + str(chunks_sent))
@@ -136,7 +136,7 @@ class Peer_Server(threading.Thread):
                                 except socket.error as msg:
                                     self.print_trigger.emit("Connection Error: %s" % msg, '11')
                                 except Exception as e:
-                                    self.print_trigger.emit('Error: ' + e, '11')
+                                    self.print_trigger.emit('Error: ' + str(e), '11')
 
                             if len(buff) != 0:  # Invio dell'eventuale resto, se più piccolo di chunk_size
                                 try:
@@ -146,14 +146,14 @@ class Peer_Server(threading.Thread):
                                 except socket.error as msg:
                                     self.print_trigger.emit("Connection Error: %s" % msg, '11')
                                 except Exception as e:
-                                    self.print_trigger.emit('Error: ' + e, '11')
+                                    self.print_trigger.emit('Error: ' + str(e), '11')
 
                             #output(self.output_lock, "\r\nUpload Completed")
 
                         except socket.error as msg:
                             self.print_trigger.emit("Connection Error: %s" % msg, '11')
                         except Exception as e:
-                            self.print_trigger.emit('Error: ' + e, '11')
+                            self.print_trigger.emit('Error: ' + str(e), '11')
                         except EOFError:
                             self.print_trigger.emit("Error: You have read a EOF char", '11')
 

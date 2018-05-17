@@ -7,10 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-#from PyQt4.QtGui import QApplication
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
+    _fromUtf8 = lambda s: s
 except AttributeError:
     def _fromUtf8(s):
         return s
@@ -149,7 +148,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         part_doesnt_exists = True
 
         allRows = self.tableWidget.rowCount()
-        for row in xrange(0, allRows):
+        for row in range(0, allRows):
             part_number = self.tableWidget.item(row, 0).text()
 
             if int(part_n) == int(part_number):
@@ -165,11 +164,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             row = self.tableWidget.rowCount() - 1
 
-            item = QtWidgets.QTableWidgetItem(QtCore.QString(part_n))
+            item = QtWidgets.QTableWidgetItem(part_n)
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.tableWidget.setItem(row, 0, item)
 
-            item = QtWidgets.QTableWidgetItem(QtCore.QString(source))
+            item = QtWidgets.QTableWidgetItem(source)
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.tableWidget.setItem(row, 1, item)
 
