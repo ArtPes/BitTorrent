@@ -475,14 +475,21 @@ class Client(object):
                         printable_response += hitpeer_ipv6 + '  '
                         hitpeer_port = recvall(self.tracker, 5).decode("utf-8")
                         printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, 2*n_parts8).decode('utf8')
+                        hitpeer_partlist = recvall(self.tracker, n_parts8).decode('utf8')
                         #printable_response += hitpeer_partlist.decode('utf-8') + '  '
+
+                        new_hit_part = [hitpeer_partlist[g:g+3]for g in range(0,len(hitpeer_partlist),3)]
+                        list_bin = []
+                        for t in new_hit_part:
+                            list_bin.append(bin(int(t)))
+
+                        siamobravi = "".join(list_bin)
 
                         hitpeers.append({
                             "ipv4": hitpeer_ipv4,
                             "ipv6": hitpeer_ipv6,
                             "port": hitpeer_port,
-                            "part_list": hitpeer_partlist
+                            "part_list": siamobravi
                         })
 
                     self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + printable_response, '02')
