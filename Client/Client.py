@@ -8,7 +8,7 @@ from helpers.helpers import *
 import threading, json, collections
 from multiprocessing import Pool
 from .DownloadingThreadPool import ThreadPool
-from bitstring import BitArray
+
 
 
 class Client(object):

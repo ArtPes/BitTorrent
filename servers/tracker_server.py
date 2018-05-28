@@ -9,7 +9,7 @@ import threading
 from dbmodules.dbconnection import *
 from helpers import *
 from PyQt5 import QtCore, QtGui, QtWidgets
-import bitstring
+
 
 
 class Tracker_Server(threading.Thread):
