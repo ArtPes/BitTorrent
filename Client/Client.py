@@ -475,21 +475,21 @@ class Client(object):
                         printable_response += hitpeer_ipv6 + '  '
                         hitpeer_port = recvall(self.tracker, 5).decode("utf-8")
                         printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, n_parts8).decode('utf8')
+                        hitpeer_partlist = recvall(self.tracker, n_parts8*3).decode('utf8')
                         #printable_response += hitpeer_partlist.decode('utf-8') + '  '
 
                         new_hit_part = [hitpeer_partlist[g:g+3]for g in range(0,len(hitpeer_partlist),3)]
                         list_bin = []
                         for t in new_hit_part:
-                            list_bin.append(bin(int(t)))
+                            list_bin.append(bin(int(t))[-8:])
 
                         siamobravi = "".join(list_bin)
-
+                        new_siamobravi = siamobravi[:n_parts]
                         hitpeers.append({
                             "ipv4": hitpeer_ipv4,
                             "ipv6": hitpeer_ipv6,
                             "port": hitpeer_port,
-                            "part_list": siamobravi
+                            "part_list": new_siamobravi
                         })
 
                     self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + printable_response, '02')
@@ -511,10 +511,10 @@ class Client(object):
                             part_count = 0
                             # VALIDO PER part_list salvata come stringa di caratteri ASCII
 
-                            for c in hp['part_list']:
+                            for bit in hp['part_list']:
                                 #bits = ''.join(format(ord(x), 'b') for x in str(c))
-                                bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
-                                for bit in bits:
+                                #bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
+                                #for bit in bits:
 
                                     if int(bit) == 1:  # se la parte è disponibile
                                         part = [part for part in parts if part['n'] == part_count]
