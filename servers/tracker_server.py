@@ -227,14 +227,14 @@ class Tracker_Server(threading.Thread):
                         # li mette all'inizio e cambia il significato della partlist
                         for part in parts_8:
                             if len(part) == 8:
-                                ascii_part_list += chr(int(part, 2))
+                                ascii_part_list += str(int(part, 2)).zfill(3)
                             else:
                                 part = part.ljust(8, "0")
-                                ascii_part_list += chr(int(part, 2))
-
+                                ascii_part_list += str(int(part, 2)).zfill(3)
                         #print ascii_part_list
 
                         msg += str(peer['ipv4']) + "|" + str(peer['ipv6']) + str(peer['port']) + str(ascii_part_list)
+                        #print(msg.encode('ascii'))
                         print_msg += "  " + str(peer['ipv4']) + "  " + str(peer['ipv6']) + "  " + str(peer['port']) + \
                                      "  " + str(ascii_part_list)
 

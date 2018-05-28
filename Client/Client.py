@@ -475,7 +475,7 @@ class Client(object):
                         printable_response += hitpeer_ipv6 + '  '
                         hitpeer_port = recvall(self.tracker, 5).decode("utf-8")
                         printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, 2*n_parts8).decode('utf8')
+                        hitpeer_partlist = recvall(self.tracker, n_parts8).decode('utf8')
                         #printable_response += hitpeer_partlist.decode('utf-8') + '  '
 
                         hitpeers.append({
