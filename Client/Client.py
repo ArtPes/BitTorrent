@@ -516,6 +516,7 @@ class Client(object):
                                 #bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
                                 bits = str(bin(c))[2:]
                                 bits = bits[:n_parts]
+
                                 for bit in bits:
                                     try:
                                         if int(bit) == 1:  # se la parte è disponibile
