@@ -374,7 +374,7 @@ class Client(object):
                             self.fetch(file_to_download)
 
                             # Poi ogni 60(10) sec
-                            self.fetch_scheduler = Scheduler(10, self.fetch, file_to_download)  # Auto start
+                            self.fetch_scheduler = Scheduler(60, self.fetch, file_to_download)  # Auto start
 
                             # Aspetto che la prima fetch abbia terminato
                             while self.fetching:
@@ -475,21 +475,21 @@ class Client(object):
                         printable_response += hitpeer_ipv6 + '  '
                         hitpeer_port = recvall(self.tracker, 5).decode("utf-8")
                         printable_response += hitpeer_port + '  '
-                        hitpeer_partlist = recvall(self.tracker, n_parts8*3).decode('utf8')
+                        hitpeer_partlist = recvall(self.tracker, n_parts8)
                         #printable_response += hitpeer_partlist.decode('utf-8') + '  '
 
-                        new_hit_part = [hitpeer_partlist[g:g+3]for g in range(0, len(hitpeer_partlist), 3)]
-                        list_bin = []
-                        for t in new_hit_part:
-                            list_bin.append(str(format(int(t), '08b')).replace("'", ""))
-
-                        siamobravi = "".join(list_bin)
-                        new_siamobravi = siamobravi[:n_parts]
+                        # new_hit_part = [hitpeer_partlist[g:g+3]for g in range(0, len(hitpeer_partlist), 3)]
+                        # list_bin = []
+                        # for t in new_hit_part:
+                        #     list_bin.append(str(format(int(t), '08b')).replace("'", ""))
+                        #
+                        # siamobravi = "".join(list_bin)
+                        # new_siamobravi = siamobravi[:n_parts]
                         hitpeers.append({
                             "ipv4": hitpeer_ipv4,
                             "ipv6": hitpeer_ipv6,
                             "port": hitpeer_port,
-                            "part_list": new_siamobravi
+                            "part_list": hitpeer_partlist
                         })
 
                     self.print_trigger.emit('<= ' + str(self.tracker.getpeername()[0]) + '  ' + printable_response, '02')
@@ -511,48 +511,48 @@ class Client(object):
                             part_count = 0
                             # VALIDO PER part_list salvata come stringa di caratteri ASCII
 
-                            for bit in hp['part_list']:
+                            for c in hp['part_list']:
                                 #bits = ''.join(format(ord(x), 'b') for x in str(c))
-                                #bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
-                                #for bit in bits:
-                                try:
-                                    if int(bit) == 1:  # se la parte è disponibile
-                                        part = [part for part in parts if part['n'] == part_count]
+                                bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
+                                for bit in bits:
+                                    try:
+                                        if int(bit) == 1:  # se la parte è disponibile
+                                            part = [part for part in parts if part['n'] == part_count]
 
-                                        if len(part) > 0:
-                                            peers = parts[part_count-1]['peers'] if parts[part_count-1]['peers'] is not None else []
+                                            if len(part) > 0:
+                                                peers = parts[part_count-1]['peers'] if parts[part_count-1]['peers'] is not None else []
 
-                                            exists = [True for peer in peers if (peer['ipv4'] == hp['ipv4']) or (peer['ipv6'] == hp['ipv6'])]
+                                                exists = [True for peer in peers if (peer['ipv4'] == hp['ipv4']) or (peer['ipv6'] == hp['ipv6'])]
 
-                                            if not exists:
+                                                if not exists:
+                                                    peers.append({
+                                                                 "ipv4": hp['ipv4'],
+                                                                 "ipv6": hp['ipv6'],
+                                                                 "port": hp['port']
+                                                             })
+
+                                                    parts[part_count - 1]['occ'] = int(parts[part_count - 1]['occ']) + 1
+
+                                                parts[part_count-1]['peers'] = peers
+                                            else:
+                                                peers = []
                                                 peers.append({
                                                              "ipv4": hp['ipv4'],
                                                              "ipv6": hp['ipv6'],
                                                              "port": hp['port']
                                                          })
-
-                                                parts[part_count - 1]['occ'] = int(parts[part_count - 1]['occ']) + 1
-
-                                            parts[part_count-1]['peers'] = peers
-                                        else:
-                                            peers = []
-                                            peers.append({
-                                                         "ipv4": hp['ipv4'],
-                                                         "ipv6": hp['ipv6'],
-                                                         "port": hp['port']
+                                                parts.append({
+                                                         "n": part_count,
+                                                         "occ": 1,
+                                                         "downloaded": "false",
+                                                         "peers": peers
                                                      })
-                                            parts.append({
-                                                     "n": part_count,
-                                                     "occ": 1,
-                                                     "downloaded": "false",
-                                                     "peers": peers
-                                                 })
 
-                                        part_count += 1
-                                    else:
-                                        part_count += 1
-                                except Exception as e:
-                                    print(str(e))
+                                            part_count += 1
+                                        else:
+                                            part_count += 1
+                                    except Exception as e:
+                                        print(str(e))
                         # ordino la lista delle parti in base alle occorrenze in modo crescente
                         sorted_parts = sorted(parts, key=lambda k: k['occ'])
 

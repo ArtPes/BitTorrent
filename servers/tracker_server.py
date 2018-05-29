@@ -218,7 +218,7 @@ class Tracker_Server(threading.Thread):
 
                     print_msg = "AFCH" + "  " + n_hitpeers
                     for peer in hitpeers:
-                        ascii_part_list = ""
+                        ascii_part_list = bytearray()
                         n = 8
                         parts_8 = [peer['part_list'][i:i+n] for i in range(0, len(peer['part_list'])+1, n)]
 
@@ -227,27 +227,22 @@ class Tracker_Server(threading.Thread):
                         # li mette all'inizio e cambia il significato della partlist
                         for part in parts_8:
                             if len(part) == 8:
-                                ascii_part_list += str(int(part, 2)).zfill(3)
+                                ascii_part_list.append(int(part, 2))
                             else:
                                 part = part.ljust(8, "0")
-                                ascii_part_list += str(int(part, 2)).zfill(3)
+                                ascii_part_list.append(int(part, 2))
                         #print ascii_part_list
 
-                        msg += str(peer['ipv4']) + "|" + str(peer['ipv6']) + str(peer['port']) + str(ascii_part_list)
+                        msg += str(peer['ipv4']) + "|" + str(peer['ipv6']) + str(peer['port'])
                         #print(msg.encode('ascii'))
                         print_msg += "  " + str(peer['ipv4']) + "  " + str(peer['ipv6']) + "  " + str(peer['port']) + \
                                      "  " + str(ascii_part_list)
 
                     try:
-
-                        print(str(ascii_part_list))
-                        print("Lunghezza: ",str(len(ascii_part_list)))
-                        print(str(ascii_part_list).encode('utf-8'))
-                        print(str(ascii_part_list).encode('utf-8').decode('utf-8'))
-                        print("\n")
                         msg = msg.encode('utf-8')
 
                         conn.sendall(msg)
+                        conn.sendall(ascii_part_list)
 
                         self.print_trigger.emit(
                             "=> " + str(conn.getpeername()[0]) + "  " + print_msg, "12")
