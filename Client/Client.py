@@ -509,11 +509,13 @@ class Client(object):
                         # scorro i risultati della FETCH ed aggiorno la lista delle parti in base alla disponibilità
                         for hp in hitpeers:
                             part_count = 0
-                            # VALIDO PER part_list salvata come stringa di caratteri ASCII
+                            # VALIDO PER part_list salvata str(int(c, 2))come stringa di caratteri ASCII
 
                             for c in hp['part_list']:
                                 #bits = ''.join(format(ord(x), 'b') for x in str(c))
-                                bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
+                                #bits = bin(ord(c)).replace("0b", "").replace("b", "").zfill(8)  # Es: 0b01001101
+                                bits = str(bin(c))[2:]
+                                bits = bits[:n_parts]
                                 for bit in bits:
                                     try:
                                         if int(bit) == 1:  # se la parte è disponibile
