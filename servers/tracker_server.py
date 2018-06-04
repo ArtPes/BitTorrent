@@ -214,9 +214,10 @@ class Tracker_Server(threading.Thread):
 
                     n_hitpeers = str(len(hitpeers)).zfill(3)
 
-                    msg = "AFCH" + n_hitpeers
+                    startmsg = "AFCH" + n_hitpeers
 
-                    print_msg = "AFCH" + "  " + n_hitpeers
+                    asd = "AFCH" + "  " + n_hitpeers
+                    conn.sendall(startmsg.encode('utf-8'))
                     for peer in hitpeers:
                         ascii_part_list = bytearray()
                         n = 8
@@ -233,17 +234,19 @@ class Tracker_Server(threading.Thread):
                                 ascii_part_list.append(int(part, 2))
                         #print ascii_part_list
 
-                        msg += str(peer['ipv4']) + "|" + str(peer['ipv6']) + str(peer['port'])
+                        msg = str(peer['ipv4']) + "|" + str(peer['ipv6']) + str(peer['port'])
                         #print(msg.encode('ascii'))
-                        print_msg += "  " + str(peer['ipv4']) + "  " + str(peer['ipv6']) + "  " + str(peer['port']) + \
+                        print_msg = "  " + str(peer['ipv4']) + "  " + str(peer['ipv6']) + "  " + str(peer['port']) + \
                                      "  " + str(ascii_part_list)
+                        try:
+                            msg = msg.encode('utf-8')
+
+                            conn.sendall(msg)
+                            conn.sendall(ascii_part_list)
+                        except Exception as e:
+                            print(str(e))
 
                     try:
-                        msg = msg.encode('utf-8')
-
-                        conn.sendall(msg)
-                        conn.sendall(ascii_part_list)
-
                         self.print_trigger.emit(
                             "=> " + str(conn.getpeername()[0]) + "  " + print_msg, "12")
                         # Spazio
