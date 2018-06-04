@@ -10,12 +10,13 @@ from GUI.ui import *
 from GUI import main_window
 from GUI import download
 
+
 class Main(QtCore.QThread):
     download_trigger = QtCore.pyqtSignal(str, str, int)  # n parte, sorgente, progresso
     download_progress_trigger = QtCore.pyqtSignal(int, str)  # n parti scaricate, n parti totale, nome file
     print_trigger = QtCore.pyqtSignal(str, str)
 
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         super(Main, self).__init__(parent)
 
     def run(self):
@@ -25,7 +26,19 @@ class Main(QtCore.QThread):
         # connessione al database
         db = MongoConnection(out_lck)
         db.refresh()
-
+        print(r"""
+          ___                       ___           ___           ___           ___           ___           ___           ___           ___     
+         /\  \          ___        /\  \         /\  \         /\  \         /\  \         /\  \         /\  \         /\__\         /\  \    
+        /::\  \        /\  \       \:\  \        \:\  \       /::\  \       /::\  \       /::\  \       /::\  \       /::|  |        \:\  \   
+       /:/\:\  \       \:\  \       \:\  \        \:\  \     /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/\:\  \     /:|:|  |         \:\  \  
+      /::\~\:\__\      /::\__\      /::\  \       /::\  \   /:/  \:\  \   /::\~\:\  \   /::\~\:\  \   /::\~\:\  \   /:/|:|  |__       /::\  \ 
+     /:/\:\ \:|__|  __/:/\/__/     /:/\:\__\     /:/\:\__\ /:/__/ \:\__\ /:/\:\ \:\__\ /:/\:\ \:\__\ /:/\:\ \:\__\ /:/ |:| /\__\     /:/\:\__\
+     \:\~\:\/:/  / /\/:/  /       /:/  \/__/    /:/  \/__/ \:\  \ /:/  / \/_|::\/:/  / \/_|::\/:/  / \:\~\:\ \/__/ \/__|:|/:/  /    /:/  \/__/
+      \:\ \::/  /  \::/__/       /:/  /        /:/  /       \:\  /:/  /     |:|::/  /     |:|::/  /   \:\ \:\__\       |:/:/  /    /:/  /     
+       \:\/:/  /    \:\__\       \/__/         \/__/         \:\/:/  /      |:|\/__/      |:|\/__/     \:\ \/__/       |::/  /     \/__/      
+        \::/__/      \/__/                                    \::/  /       |:|  |        |:|  |        \:\__\         /:/  /                 
+         ~~                                                    \/__/         \|__|         \|__|         \/__/         \/__/                  
+        """)
         int_choice = loop_menu(out_lck, "Are you a tracker?", ["Yes", "No"])
 
         if int_choice == 1:
@@ -51,23 +64,28 @@ class Main(QtCore.QThread):
                                                                                                       "Set part length"])
                 if int_option == 1:
                     client.login()
-                    while int_option != 3:
-                        int_option = loop_menu(out_lck, "Select one of the following options ('e' to exit): ", ["Add file",
-                                                                                                                "Search file",
-                                                                                                                "Logout"])
-                        if int_option == 1:
-                            # scelgo un file dalla cartella e lo aggiungo al tracker
-                            client.share()
-                        elif int_option == 2:
-                            # creo una query e la invio al tracker
-                            client.look()
-                        elif int_option == 3:
-                            client.logout()
-                            output(out_lck, 'Logout completed.')
-                        else:
-                            output(out_lck, "Option " + str(int_option) + " not available")
-
-
+                    if client.session_id == '0000000000000000' or client.session_id == '' or client.session_id is None:
+                        client.session_id = None
+                    else:
+                        while True:
+                            int_option = loop_menu(out_lck, "Select one of the following options ('e' to exit): ",
+                                                   ["Add file",
+                                                    "Search file",
+                                                    "Logout"])
+                            if int_option == 1:
+                                # scelgo un file dalla cartella e lo aggiungo al tracker
+                                client.share()
+                            elif int_option == 2:
+                                # creo una query e la invio al tracker
+                                client.look()
+                            elif int_option == 3:
+                                client.logout()
+                                if client.session_id == None:
+                                    output(out_lck, 'Logout completed.')
+                                else:
+                                    output(out_lck,"Try again\n")
+                            else:
+                                output(out_lck, "Option " + str(int_option) + " not available")
                 elif int_option == 2:
                     client.parallel_downloads = loop_int_input(out_lck, "Insert the number of parallel downloads: ")
 
@@ -77,7 +95,6 @@ class Main(QtCore.QThread):
 
 
 if __name__ == "__main__":
-
     app = QtWidgets.QApplication(sys.argv)
 
     mainwindow = main_window.Ui_MainWindow()
