@@ -1,0 +1,4 @@
+luca: login, impostazioni numero thread e dimensione parti e aggiunta file
+arturo:search ?
+daniele:fetch?
+lucia: logout con i due casi
